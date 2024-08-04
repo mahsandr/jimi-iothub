@@ -3,26 +3,25 @@ package client
 import (
 	"context"
 	"errors"
-	"github.com/go-resty/resty/v2"
-	"github.com/openfms/jimi-iothub/utils"
-	"github.com/redis/go-redis/v9"
-	"net/url"
 	"strings"
 	"sync"
+
+	"github.com/go-resty/resty/v2"
+	"github.com/redis/go-redis/v9"
 )
 
 type IotHubClient struct {
 	client      *resty.Client
 	config      *IotHubConfig
 	redis       *redis.Client
-	endPointURL *url.URL
+	endPointURL string
 	wg          *sync.WaitGroup
 }
 
 //go:generate mockgen -source=$GOFILE -destination=../mock/iothub_cleint.go -package=$GOPACKAG
 type JimiIotHub interface {
 	Stop()
-	EndpointURL() *url.URL
+	EndpointURL() string
 	GetEndpointHost() string
 	Client() *resty.Client
 	Config(canModify bool) *IotHubConfig
@@ -53,13 +52,8 @@ func NewIotHubClient(config *IotHubConfig) (*IotHubClient, error) {
 	if config == nil {
 		return nil, ErrNilConfig
 	}
-
-	endPointURL, err := utils.GetEndpointURL(config.EndPoint)
-	if err != nil {
-		return nil, err
-	}
 	client := resty.New().
-		SetBaseURL(endPointURL.String()).
+		SetBaseURL(config.EndPoint).
 		SetHeaders(map[string]string{
 			"Content-Type": "application/x-www-form-urlencoded",
 		})
@@ -69,7 +63,7 @@ func NewIotHubClient(config *IotHubConfig) (*IotHubClient, error) {
 	iotHub := &IotHubClient{
 		client:      client,
 		wg:          &sync.WaitGroup{},
-		endPointURL: endPointURL,
+		endPointURL: config.EndPoint,
 		config:      config,
 	}
 	if len(config.RedisAddress) > 0 {
@@ -91,13 +85,12 @@ func (cli *IotHubClient) Stop() {
 }
 
 // EndpointURL returns the URL of the endpoint.
-func (cli *IotHubClient) EndpointURL() *url.URL {
-	endpoint := *cli.endPointURL // copy to prevent callers from modifying internal state
-	return &endpoint
+func (cli *IotHubClient) EndpointURL() string {
+	return cli.endPointURL
 }
 
 func (cli *IotHubClient) GetEndpointHost() string {
-	hostParts := strings.Split(cli.EndpointURL().Host, ":")
+	hostParts := strings.Split(cli.EndpointURL(), ":")
 	if len(hostParts) > 0 {
 		return hostParts[0]
 	}

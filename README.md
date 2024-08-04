@@ -5,15 +5,16 @@
 </div>
 
 # jimi iothub client
+
 [![Documentation](https://img.shields.io/badge/Documentation-Read%20Now-blue.svg)](https://docs.jimicloud.com/)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-
 
 The IoT Hub Client Library for Go language is a powerful and user-friendly library designed to simplify the process of interacting with Jimi IoT Hub in Golang. This library provides an abstraction layer over the complex IoT Hub protocols, allowing developers to focus on building and managing their IoT solutions.
 
 For detailed information and usage examples, please refer to our [documentation](https://docs.jimicloud.com/).
 
 ## Features
+
 - **Device Management:** Easily manage jimi devices within the IoT Hub.
 - **Cloud-to-Device Communication:** Easily send cloud-to-device messages and commands.
 - **Command Generator:** Generate commands with ease for device control and management.
@@ -22,10 +23,13 @@ For detailed information and usage examples, please refer to our [documentation]
 - **Redis Integration:** Integrated Redis client for tracking unique request codes.
 
 ## Installation
+
 ```bash
 go get github.com/openfms/jimi-iothub
 ```
+
 here is an exmaple of sending `STATUS` command to device
+
 ```go
 import iothub "github.com/openfms/jimi-iothub"
 
@@ -37,7 +41,7 @@ func main(){
 	if err!=nil{
         panic(err)
     }
-	redisCli := redis.NewClient(opts) 
+	redisCli := redis.NewClient(opts)
 
     // prepare iothub client
 	iothubCli, err := iothub.NewIotHubClient(env, redisCli)
@@ -55,11 +59,14 @@ func main(){
 }
 
 ```
+
 ## Interfaces
+
 We've designed two interfaces for seamless integration: one for making API calls and another for generating commands.
 
 ### Commands
-Explore the commands available in our IoT Hub Client Library. While we're actively developing and updating the library, we've started with popular commands. You can easily generate any command using our 'Generate Command' feature. 
+
+Explore the commands available in our IoT Hub Client Library. While we're actively developing and updating the library, we've started with popular commands. You can easily generate any command using our 'Generate Command' feature.
 
 ```Go
 type DeviceCommands interface {
@@ -102,7 +109,7 @@ type DeviceCommands interface {
 ```Go
 type JimiIotHub interface {
     Stop()
-    EndpointURL() *url.URL
+    EndpointURL() string
     SendDeviceInstruction(ctx context.Context, request *InstructRequest) (*Response, error)
 
     DeviceInstructionRequest(ctx context.Context, imei string, command string) (*InstructRequest, error)

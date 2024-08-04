@@ -87,7 +87,7 @@ func (cli *IotHubClient) SendDeviceInstruction(ctx context.Context, request *Ins
 	resp, err := cli.client.R().
 		SetContext(ctx).
 		SetBody(values.Encode()).
-		Post(cli.endPointURL.String() + "/api/device/sendInstruct")
+		Post(cli.endPointURL + "/api/device/sendInstruct")
 
 	if err != nil {
 		return nil, err
