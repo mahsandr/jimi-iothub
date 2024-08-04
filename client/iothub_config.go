@@ -22,7 +22,7 @@ type IotHubConfig struct {
 	RedisDB                 int    `env:"IOTHUB_REDIS_DB" envDefault:"0"`
 	Timeout                 int    `env:"JIMI_REQUEST_TIMEOUT" envDefault:"30"`
 	OfflineFlag             bool   `env:"JIMI_OFFLINE_FLAG" envDefault:"false"`
-	Sync                    bool   `env:"JIMI_REQUEST_TIMEOUT" envDefault:"true"`
+	Sync                    bool   `env:"JIMI_REQUEST_SYNC" envDefault:"true"`
 }
 
 func ReadIotHubEnvironments() (*IotHubConfig, error) {
