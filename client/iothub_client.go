@@ -91,8 +91,8 @@ func (cli *IotHubClient) EndpointURL() string {
 
 func (cli *IotHubClient) GetEndpointHost() string {
 	hostParts := strings.Split(cli.EndpointURL(), ":")
-	if len(hostParts) > 0 {
-		return hostParts[0]
+	if len(hostParts) >= 2 {
+		return hostParts[len(hostParts)-2]
 	}
 	return ""
 }
