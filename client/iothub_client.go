@@ -39,7 +39,7 @@ type JimiIotHub interface {
 	GenerateRtmpLiveLink(secure bool, prefix string, channel int, imei string) (string, error)
 	GenerateFlvLiveLink(secure bool, prefix string, channel int, imei string) (string, error)
 	GenerateFLVReplayLink(secure bool, prefix string, imei string) (string, error)
-	GenerateFLVHistoryLink(secure bool, channel int, imei string) (string, error)
+	GenerateFLVHistoryLink(secure bool, prefix string, channel int, imei string) (string, error)
 	GenerateVideoLinks(secure bool, prefix string, channel int, imei string) (*VideoLinks, error)
 }
 

@@ -1,8 +1,9 @@
 package client
 
 import (
-	"gotest.tools/v3/assert"
 	"testing"
+
+	"gotest.tools/v3/assert"
 )
 
 func TestGenerateVideoLiveLink(t *testing.T) {
@@ -138,7 +139,7 @@ func TestGenerateHttpFLVHistoryLink(t *testing.T) {
 
 	for name, test := range tests {
 		t.Run(name, func(t *testing.T) {
-			result, err := GenerateFLVHistoryLink(test.secure, test.endpoint, test.channel, test.imei)
+			result, err := GenerateFLVHistoryLink(test.secure, test.endpoint, "", test.channel, test.imei)
 			assert.NilError(t, err)
 			assert.Equal(t, test.expected, result, "Unexpected result")
 		})

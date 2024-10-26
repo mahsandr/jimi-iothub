@@ -10,7 +10,7 @@ import (
 
 const (
 	HttpFLVLiveLinkFormat    = "{{FlvAddress}}/{{Prefix}}/{{channel}}/{{IMEI}}.flv"
-	HttpFLVHistoryLinkFormat = "{{FlvAddress}}/{{channel}}/{{IMEI}}.history.flv"
+	HttpFLVHistoryLinkFormat = "{{FlvAddress}}/{{Prefix}}/{{channel}}/{{IMEI}}.history.flv"
 	HttpFLVReplayLinkFormat  = "{{FlvAddress}}/{{Prefix}}/{{IMEI}}.flv"
 	RtmpLiveLinkFormat       = "{{RtmpAddress}}/{{Prefix}}/{{channel}}/{{IMEI}}"
 	validEndpointRegex       = `^(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}|(?:\d{1,3}\.){3}\d{1,3})(?::\d{1,5})?$`
@@ -54,7 +54,7 @@ func GenerateFLVLiveLink(secure bool, endpoint, prefix string, channel int, imei
 
 // GenerateFLVHistoryLink generates flv history video link
 // Example: http://120.78.224.93:8881/3/868120303960873.history.flv
-func GenerateFLVHistoryLink(secure bool, endpoint string, channel int, imei string) (string, error) {
+func GenerateFLVHistoryLink(secure bool, endpoint, prefix string, channel int, imei string) (string, error) {
 	scheme := "http"
 	if secure {
 		scheme = "https"
@@ -71,10 +71,15 @@ func GenerateFLVHistoryLink(secure bool, endpoint string, channel int, imei stri
 	}
 	replacer := strings.NewReplacer(
 		"{{FlvAddress}}", endpointURL.String(),
+		"{{Prefix}}", prefix,
 		"{{channel}}", fmt.Sprintf("%d", channel),
 		"{{IMEI}}", imei,
 	)
-	link := replacer.Replace(HttpFLVHistoryLinkFormat)
+	format := HttpFLVHistoryLinkFormat
+	if prefix == "" {
+		format = strings.ReplaceAll(format, "{{Prefix}}/", "")
+	}
+	link := replacer.Replace(format)
 	return link, nil
 }
 
@@ -153,13 +158,13 @@ func (cli *IotHubClient) GenerateRtmpLiveLink(secure bool, prefix string, channe
 	return GenerateRtmpLiveLink(secure, rtmpEndpoint, prefix, channel, imei)
 }
 
-func (cli *IotHubClient) GenerateFLVHistoryLink(secure bool, channel int, imei string) (string, error) {
+func (cli *IotHubClient) GenerateFLVHistoryLink(secure bool, prefix string, channel int, imei string) (string, error) {
 	port := cli.config.HttpFlvMediaServerPort
 	if secure {
 		port = cli.config.HttpsFlvMediaServerPort
 	}
 	flvEndpoint := net.JoinHostPort(cli.GetEndpointHost(), port)
-	return GenerateFLVHistoryLink(secure, flvEndpoint, channel, imei)
+	return GenerateFLVHistoryLink(secure, flvEndpoint, prefix, channel, imei)
 }
 
 func (cli *IotHubClient) GenerateFLVReplayLink(secure bool, prefix string, imei string) (string, error) {
@@ -184,7 +189,7 @@ func (cli *IotHubClient) GenerateVideoLinks(secure bool, prefix string, channel 
 	if err != nil {
 		return nil, err
 	}
-	flvHistoryLink, err := cli.GenerateFLVHistoryLink(secure, channel, imei)
+	flvHistoryLink, err := cli.GenerateFLVHistoryLink(secure, prefix, channel, imei)
 	if err != nil {
 		return nil, err
 	}
