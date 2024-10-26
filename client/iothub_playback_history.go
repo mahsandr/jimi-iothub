@@ -55,7 +55,7 @@ const (
 type PlaybackCmdContent struct {
 	ServerAddress string               `json:"serverAddress"`
 	TCPPort       string               `json:"tcpPort"`
-	UDPPort       string               `json:"udpPort"`
+	UDPPort       int                  `json:"udpPort"`
 	Channel       int                  `json:"channel"`
 	ResourceType  PlaybackResourceType `json:"resourceType"`
 	CodeType      PlaybackCodeType     `json:"codeType"`

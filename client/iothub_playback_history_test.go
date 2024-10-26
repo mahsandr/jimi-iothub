@@ -19,7 +19,7 @@ func TestIotHubClient_HistoryVideoPlaybackRequest(t *testing.T) {
 	req, err := iothubcli.HistoryVideoPlaybackRequest(ctx, deviceImei, DeviceModelJC450, &PlaybackCmdContent{
 		InstructionID: utils.GenerateUniqueInstructionID(),
 		TCPPort:       "10003",
-		UDPPort:       "0",
+		UDPPort:       0,
 		Channel:       1,
 		ResourceType:  PlaybackResourceAudioAndVideo,
 		CodeType:      PlaybackAllStream,
