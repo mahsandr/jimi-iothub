@@ -2,10 +2,11 @@ package client
 
 import (
 	"context"
-	"github.com/openfms/jimi-iothub/utils"
-	"gotest.tools/v3/assert"
 	"os"
 	"testing"
+
+	"github.com/openfms/jimi-iothub/utils"
+	"gotest.tools/v3/assert"
 )
 
 func TestIotHubClient_HistoryVideoPlaybackRequest(t *testing.T) {
@@ -19,7 +20,7 @@ func TestIotHubClient_HistoryVideoPlaybackRequest(t *testing.T) {
 		InstructionID: utils.GenerateUniqueInstructionID(),
 		TCPPort:       "10003",
 		UDPPort:       "0",
-		Channel:       "1",
+		Channel:       1,
 		ResourceType:  PlaybackResourceAudioAndVideo,
 		CodeType:      PlaybackAllStream,
 		StorageType:   PlaybackStorageAll,

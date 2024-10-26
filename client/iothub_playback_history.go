@@ -6,57 +6,57 @@ import (
 	"fmt"
 )
 
-type PlaybackResourceType string
+type PlaybackResourceType int
 
 const (
-	PlaybackResourceAudioAndVideo PlaybackResourceType = "0"
-	PlaybackResourceAudio         PlaybackResourceType = "1"
-	PlaybackResourceVideo         PlaybackResourceType = "2"
-	PlaybackResourceAudioOrVideo  PlaybackResourceType = "3"
+	PlaybackResourceAudioAndVideo PlaybackResourceType = 0
+	PlaybackResourceAudio         PlaybackResourceType = 1
+	PlaybackResourceVideo         PlaybackResourceType = 2
+	PlaybackResourceAudioOrVideo  PlaybackResourceType = 3
 )
 
-type PlaybackCodeType string
+type PlaybackCodeType int
 
 const (
-	PlaybackAllStream  PlaybackCodeType = "0"
-	PlaybackMainStream PlaybackCodeType = "1"
-	PlaybackSubStream  PlaybackCodeType = "2"
+	PlaybackAllStream  PlaybackCodeType = 0
+	PlaybackMainStream PlaybackCodeType = 1
+	PlaybackSubStream  PlaybackCodeType = 2
 )
 
-type PlaybackStorageType string
+type PlaybackStorageType int
 
 const (
-	PlaybackStorageAll  PlaybackStorageType = "0"
-	PlaybackStorageMain PlaybackStorageType = "1"
-	StorageDisaster     PlaybackStorageType = "2"
+	PlaybackStorageAll  PlaybackStorageType = 0
+	PlaybackStorageMain PlaybackStorageType = 1
+	StorageDisaster     PlaybackStorageType = 2
 )
 
-type PlayMethod string
+type PlayMethod int
 
 const (
-	PlayNormal         PlayMethod = "0"
-	PlayFastForward    PlayMethod = "1"
-	PlayKeyframeRewind PlayMethod = "2"
-	PlayKeyframe       PlayMethod = "3"
-	PlaySingleFrame    PlayMethod = "4"
+	PlayNormal         PlayMethod = 0
+	PlayFastForward    PlayMethod = 1
+	PlayKeyframeRewind PlayMethod = 2
+	PlayKeyframe       PlayMethod = 3
+	PlaySingleFrame    PlayMethod = 4
 )
 
-type ForwardRewind string
+type ForwardRewind int
 
 const (
-	ForwardRewindInvalid ForwardRewind = "0"
-	ForwardRewindX1      ForwardRewind = "1"
-	ForwardRewindX2      ForwardRewind = "2"
-	ForwardRewindX4      ForwardRewind = "3"
-	ForwardRewindX8      ForwardRewind = "4"
-	ForwardRewindX16     ForwardRewind = "5"
+	ForwardRewindInvalid ForwardRewind = 0
+	ForwardRewindX1      ForwardRewind = 1
+	ForwardRewindX2      ForwardRewind = 2
+	ForwardRewindX4      ForwardRewind = 3
+	ForwardRewindX8      ForwardRewind = 4
+	ForwardRewindX16     ForwardRewind = 5
 )
 
 type PlaybackCmdContent struct {
 	ServerAddress string               `json:"serverAddress"`
 	TCPPort       string               `json:"tcpPort"`
 	UDPPort       string               `json:"udpPort"`
-	Channel       string               `json:"channel"`
+	Channel       int                  `json:"channel"`
 	ResourceType  PlaybackResourceType `json:"resourceType"`
 	CodeType      PlaybackCodeType     `json:"codeType"`
 	StorageType   PlaybackStorageType  `json:"storageType"`
@@ -74,25 +74,25 @@ func (cli *IotHubClient) HistoryVideoPlaybackRequest(ctx context.Context, imei s
 	if deviceModel < DeviceModelJC450 {
 		return nil, ErrUnsupportedRequest
 	}
-	if len(cmdContent.ResourceType) == 0 {
+	if cmdContent.ResourceType == 0 {
 		cmdContent.ResourceType = PlaybackResourceAudioAndVideo
 	}
-	if len(cmdContent.CodeType) == 0 {
+	if cmdContent.CodeType == 0 {
 		cmdContent.CodeType = PlaybackAllStream
 	}
-	if len(cmdContent.StorageType) == 0 {
+	if cmdContent.StorageType == 0 {
 		cmdContent.StorageType = PlaybackStorageAll
 	}
-	if len(cmdContent.Channel) == 0 {
-		cmdContent.Channel = "1"
+	if cmdContent.Channel == 0 {
+		cmdContent.Channel = 1
 	}
 	if len(cmdContent.TCPPort) == 0 {
 		cmdContent.TCPPort = cli.config.HistoryVideoPort
 	}
-	if len(cmdContent.ForwardRewind) == 0 {
+	if cmdContent.ForwardRewind == 0 {
 		cmdContent.ForwardRewind = ForwardRewindInvalid
 	}
-	if len(cmdContent.PlayMethod) == 0 {
+	if cmdContent.PlayMethod == 0 {
 		cmdContent.PlayMethod = PlayNormal
 	}
 	if len(cmdContent.ServerAddress) == 0 {
