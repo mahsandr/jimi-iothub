@@ -13,7 +13,7 @@ import (
 	context "context"
 	reflect "reflect"
 
-	v2 "github.com/go-resty/resty/v2"
+	resty "github.com/go-resty/resty/v2"
 	client "github.com/openfms/jimi-iothub/client"
 	gomock "go.uber.org/mock/gomock"
 )
@@ -43,10 +43,10 @@ func (m *MockJimiIotHub) EXPECT() *MockJimiIotHubMockRecorder {
 }
 
 // Client mocks base method.
-func (m *MockJimiIotHub) Client() *v2.Client {
+func (m *MockJimiIotHub) Client() *resty.Client {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Client")
-	ret0, _ := ret[0].(*v2.Client)
+	ret0, _ := ret[0].(*resty.Client)
 	return ret0
 }
 
@@ -156,6 +156,51 @@ func (m *MockJimiIotHub) GenerateFlvLiveLink(secure bool, prefix string, channel
 func (mr *MockJimiIotHubMockRecorder) GenerateFlvLiveLink(secure, prefix, channel, imei any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GenerateFlvLiveLink", reflect.TypeOf((*MockJimiIotHub)(nil).GenerateFlvLiveLink), secure, prefix, channel, imei)
+}
+
+// GenerateHLSHistoryLink mocks base method.
+func (m *MockJimiIotHub) GenerateHLSHistoryLink(secure bool, prefix string, channel int, imei string) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GenerateHLSHistoryLink", secure, prefix, channel, imei)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GenerateHLSHistoryLink indicates an expected call of GenerateHLSHistoryLink.
+func (mr *MockJimiIotHubMockRecorder) GenerateHLSHistoryLink(secure, prefix, channel, imei any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GenerateHLSHistoryLink", reflect.TypeOf((*MockJimiIotHub)(nil).GenerateHLSHistoryLink), secure, prefix, channel, imei)
+}
+
+// GenerateHLSLiveLink mocks base method.
+func (m *MockJimiIotHub) GenerateHLSLiveLink(secure bool, prefix string, channel int, imei string) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GenerateHLSLiveLink", secure, prefix, channel, imei)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GenerateHLSLiveLink indicates an expected call of GenerateHLSLiveLink.
+func (mr *MockJimiIotHubMockRecorder) GenerateHLSLiveLink(secure, prefix, channel, imei any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GenerateHLSLiveLink", reflect.TypeOf((*MockJimiIotHub)(nil).GenerateHLSLiveLink), secure, prefix, channel, imei)
+}
+
+// GenerateHLSReplayLink mocks base method.
+func (m *MockJimiIotHub) GenerateHLSReplayLink(secure bool, prefix, imei string) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GenerateHLSReplayLink", secure, prefix, imei)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GenerateHLSReplayLink indicates an expected call of GenerateHLSReplayLink.
+func (mr *MockJimiIotHubMockRecorder) GenerateHLSReplayLink(secure, prefix, imei any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GenerateHLSReplayLink", reflect.TypeOf((*MockJimiIotHub)(nil).GenerateHLSReplayLink), secure, prefix, imei)
 }
 
 // GenerateRtmpLiveLink mocks base method.
