@@ -244,7 +244,7 @@ func (cli *IotHubClient) GenerateFlvLiveLink(secure bool, prefix string, channel
 func (cli *IotHubClient) GenerateHLSLiveLink(secure bool, prefix string, channel int, imei string) (string, error) {
 	port := cli.config.HttpFlvMediaServerPort
 	if secure {
-		port = cli.config.HttpFlvMediaServerPort
+		port = cli.config.HttpsFlvMediaServerPort
 	}
 	hlsEndpoint := net.JoinHostPort(cli.GetEndpointHost(), port)
 	return generateHLSLiveLink(secure, hlsEndpoint, prefix, channel, imei)
