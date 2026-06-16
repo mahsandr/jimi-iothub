@@ -16,7 +16,13 @@ const (
 	HttpHLSLiveLinkFormat    = "{{HLSAddress}}/{{Prefix}}/{{channel}}/{{IMEI}}/hls.m3u8"
 	HttpHLSHistoryLinkFormat = "{{HLSAddress}}/{{Prefix}}/{{channel}}/{{IMEI}}.history/hls.m3u8"
 	HttpHLSReplayLinkFormat  = "{{HLSAddress}}/{{Prefix}}/{{IMEI}}/hls.m3u8"
-	validEndpointRegex       = `^(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}|(?:\d{1,3}\.){3}\d{1,3})(?::\d{1,5})?$`
+	// validEndpointRegex accepts:
+	//   * single-label hostnames (e.g. "srs", "app-dashcam-v1") commonly used as
+	//     Docker / Kubernetes service names,
+	//   * dotted FQDNs (e.g. "example.com", "srs.local"),
+	//   * IPv4 addresses (e.g. "172.19.0.84"),
+	// each optionally followed by ":<port>".
+	validEndpointRegex = `^(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*(?::\d{1,5})?$`
 )
 
 type VideoLinks struct {
