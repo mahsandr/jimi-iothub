@@ -26,6 +26,8 @@ type JimiIotHub interface {
 	Client() *resty.Client
 	Config(canModify bool) *IotHubConfig
 
+	GetMediaServerHost() string
+
 	SendDeviceInstruction(ctx context.Context, request *InstructRequest) (*Response, error)
 
 	DeviceInstructionRequest(ctx context.Context, imei string, command string) (*InstructRequest, error)
@@ -100,6 +102,18 @@ func (cli *IotHubClient) GetEndpointHost() string {
 		return hostParts[len(hostParts)-2]
 	}
 	return ""
+}
+
+// GetMediaServerHost returns the host that should be used for HLS / FLV /
+// RTMP link generation. When MEDIA_SERVER_HOST is set (e.g. the SRS service
+// name) it takes precedence; otherwise we fall back to the IOTHUB_ENDPOINT
+// host, which preserves behaviour for setups where the gateway and media
+// origin live on the same machine.
+func (cli *IotHubClient) GetMediaServerHost() string {
+	if cli.config != nil && cli.config.MediaServerHost != "" {
+		return cli.config.MediaServerHost
+	}
+	return cli.GetEndpointHost()
 }
 
 // Client returns the client.

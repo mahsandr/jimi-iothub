@@ -247,6 +247,20 @@ func (mr *MockJimiIotHubMockRecorder) GetEndpointHost() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetEndpointHost", reflect.TypeOf((*MockJimiIotHub)(nil).GetEndpointHost))
 }
 
+// GetMediaServerHost mocks base method.
+func (m *MockJimiIotHub) GetMediaServerHost() string {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetMediaServerHost")
+	ret0, _ := ret[0].(string)
+	return ret0
+}
+
+// GetMediaServerHost indicates an expected call of GetMediaServerHost.
+func (mr *MockJimiIotHubMockRecorder) GetMediaServerHost() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetMediaServerHost", reflect.TypeOf((*MockJimiIotHub)(nil).GetMediaServerHost))
+}
+
 // HistoryPlaybackControlRequest mocks base method.
 func (m *MockJimiIotHub) HistoryPlaybackControlRequest(ctx context.Context, imei string, deviceModel client.DeviceModel, cmdContent *client.PlaybackControlCmdContent) (*client.InstructRequest, error) {
 	m.ctrl.T.Helper()

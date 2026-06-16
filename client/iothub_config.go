@@ -11,7 +11,13 @@ type IotHubConfig struct {
 	FileStoragePort         string `env:"FILE_STORAGE_PORT" envDefault:"23010"`
 	HttpFlvMediaServerPort  string `env:"FLV_HTTP_PORT" envDefault:"8881"`
 	HttpsFlvMediaServerPort string `env:"FLV_HTTPS_PORT" envDefault:"8890"`
+	HLSPort                 string `env:"HLS_PORT" envDefault:"8080"`
+	HLSSecurePort           string `env:"HLS_HTTPS_PORT" envDefault:"8088"`
 	RtmpMediaServerPort     string `env:"RTMP_PORT" envDefault:"1936"`
+	// MediaServerHost overrides the IOTHUB_ENDPOINT host for HLS / FLV / RTMP
+	// link generation. Set this to the SRS (or other media origin) hostname
+	// when the streaming server runs separately from the Jimi command gateway.
+	MediaServerHost string `env:"MEDIA_SERVER_HOST"`
 	LiveVideoPort           string `env:"LIVE_VIDEO_PORT" envDefault:"10002"`
 	HistoryVideoPort        string `env:"HISTORY_VIDEO_PORT" envDefault:"10003"`
 	APIPort                 string `env:"API_PORT" envDefault:"9080"`
