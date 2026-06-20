@@ -96,7 +96,11 @@ func (cli *IotHubClient) HistoryVideoPlaybackRequest(ctx context.Context, imei s
 		cmdContent.PlayMethod = PlayNormal
 	}
 	if len(cmdContent.ServerAddress) == 0 {
-		cmdContent.ServerAddress = cli.GetEndpointHost()
+		if cli.config != nil && len(cli.config.VideoIP) > 0 {
+			cmdContent.ServerAddress = cli.config.VideoIP
+		} else {
+			cmdContent.ServerAddress = cli.GetEndpointHost()
+		}
 	}
 	if len(cmdContent.BeginTime) == 0 {
 		return nil, fmt.Errorf("field begin_time is empty")
