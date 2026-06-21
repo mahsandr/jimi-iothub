@@ -55,6 +55,36 @@ func FormatUnixTime(unixTime int64) string {
 	return FormatTime(t)
 }
 
+// FormatUnixTimeIn formats a UTC Unix timestamp as YYMMDDhhmmss in the
+// requested timezone. JT/T 808 / 1078 cameras interpret the BCD time
+// payload as their LOCAL clock, so a UTC client request has to be
+// converted into the device's local time before it goes out on the
+// wire - otherwise the device looks at the wrong slice of its
+// recording. Pass nil to fall back to the server's local zone, matching
+// FormatUnixTime.
+func FormatUnixTimeIn(unixTime int64, loc *time.Location) string {
+	t := time.Unix(unixTime, 0)
+	if loc != nil {
+		t = t.In(loc)
+	}
+	return FormatTime(t)
+}
+
+// ParseDeviceTimeToUnix parses a YYMMDDhhmmss string emitted by a device
+// (interpreted in the device's local timezone) and returns the
+// corresponding UTC Unix timestamp. Loc nil means "treat the string as
+// UTC", which is rarely what you want for a Jimi-style device.
+func ParseDeviceTimeToUnix(s string, loc *time.Location) (int64, error) {
+	if loc == nil {
+		loc = time.UTC
+	}
+	t, err := time.ParseInLocation("060102150405", s, loc)
+	if err != nil {
+		return 0, err
+	}
+	return t.Unix(), nil
+}
+
 func AddOffsetToUnixTime(offset string, unixTime int64) (int64, error) {
 	parts := strings.Split(offset, ":")
 	if len(parts) != 2 {
