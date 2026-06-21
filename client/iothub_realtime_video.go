@@ -3,6 +3,7 @@ package client
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 )
 
 type RealTimeAVDataType uint8
@@ -53,7 +54,16 @@ func (cli *IotHubClient) RealTimeAVRequest(ctx context.Context, imei string, dev
 		cmdContent.Channel = "0"
 	}
 	if len(cmdContent.VideoTCPPort) == 0 {
-		cmdContent.VideoTCPPort = cli.config.LiveVideoPort
+		if cli.zlm != nil {
+			streamID := zlmStreamID(imei, cmdContent.Channel)
+			port, err := cli.zlm.OpenRtpServer(ctx, streamID)
+			if err == nil && port > 0 {
+				cmdContent.VideoTCPPort = fmt.Sprintf("%d", port)
+			}
+		}
+		if len(cmdContent.VideoTCPPort) == 0 {
+			cmdContent.VideoTCPPort = cli.config.LiveVideoPort
+		}
 	}
 	if len(cmdContent.VideoIP) == 0 {
 		cmdContent.VideoIP = cli.config.VideoIP

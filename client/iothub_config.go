@@ -41,6 +41,14 @@ type IotHubConfig struct {
 	// playback). 0 = AllStream, 1 = MainStream, 2 = SubStream. Defaults
 	// to SubStream for the same SIM-cost reason.
 	DefaultPlaybackCodeType uint8 `env:"JIMI_PLAYBACK_CODE_TYPE" envDefault:"2"`
+
+	// ZLMediaKitURL toggles the dynamic-port ZLMediaKit publishing path
+	// for 0x9101/0x9201. Set it to the ZLM HTTP API origin (e.g.
+	// "http://zlmediakit:18088") to opt in; leave empty to keep the
+	// static LIVE_VIDEO_PORT / HISTORY_VIDEO_PORT LKM flow.
+	ZLMediaKitURL    string `env:"ZLMEDIAKIT_URL"`
+	ZLMediaKitSecret string `env:"ZLMEDIAKIT_SECRET"`
+	ZLMediaKitApp    string `env:"ZLMEDIAKIT_APP" envDefault:"live"`
 }
 
 func ReadIotHubEnvironments() (*IotHubConfig, error) {

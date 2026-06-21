@@ -16,6 +16,7 @@ type IotHubClient struct {
 	redis       *redis.Client
 	endPointURL string
 	wg          *sync.WaitGroup
+	zlm         *ZLMediaKitClient
 }
 
 //go:generate mockgen -source=$GOFILE -destination=../mock/iothub_cleint.go -package=$GOPACKAG
@@ -70,6 +71,7 @@ func NewIotHubClient(config *IotHubConfig) (*IotHubClient, error) {
 		wg:          &sync.WaitGroup{},
 		endPointURL: config.EndPoint,
 		config:      config,
+		zlm:         NewZLMediaKitClient(config),
 	}
 	if len(config.RedisAddress) > 0 {
 		iotHubRedis := redis.NewClient(&redis.Options{

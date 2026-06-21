@@ -91,7 +91,16 @@ func (cli *IotHubClient) HistoryVideoPlaybackRequest(ctx context.Context, imei s
 		cmdContent.Channel = 1
 	}
 	if len(cmdContent.TCPPort) == 0 {
-		cmdContent.TCPPort = cli.config.HistoryVideoPort
+		if cli.zlm != nil {
+			streamID := zlmStreamID(imei, fmt.Sprintf("%d", cmdContent.Channel))
+			port, err := cli.zlm.OpenRtpServer(ctx, streamID)
+			if err == nil && port > 0 {
+				cmdContent.TCPPort = fmt.Sprintf("%d", port)
+			}
+		}
+		if len(cmdContent.TCPPort) == 0 {
+			cmdContent.TCPPort = cli.config.HistoryVideoPort
+		}
 	}
 	if cmdContent.ForwardRewind == 0 {
 		cmdContent.ForwardRewind = ForwardRewindInvalid
