@@ -78,7 +78,11 @@ func (cli *IotHubClient) HistoryVideoPlaybackRequest(ctx context.Context, imei s
 		cmdContent.ResourceType = PlaybackResourceAudioAndVideo
 	}
 	if cmdContent.CodeType == 0 {
-		cmdContent.CodeType = PlaybackAllStream
+		if cli.config != nil && cli.config.DefaultPlaybackCodeType != 0 {
+			cmdContent.CodeType = PlaybackCodeType(cli.config.DefaultPlaybackCodeType)
+		} else {
+			cmdContent.CodeType = PlaybackAllStream
+		}
 	}
 	if cmdContent.StorageType == 0 {
 		cmdContent.StorageType = PlaybackStorageAll

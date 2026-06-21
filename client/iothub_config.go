@@ -29,6 +29,18 @@ type IotHubConfig struct {
 	Timeout                 int    `env:"JIMI_REQUEST_TIMEOUT" envDefault:"30"`
 	OfflineFlag             bool   `env:"JIMI_OFFLINE_FLAG" envDefault:"false"`
 	Sync                    bool   `env:"JIMI_REQUEST_SYNC" envDefault:"true"`
+
+	// DefaultLiveCodeStreamType picks the bitrate the device emits for
+	// 0x9101 (real-time video) when the caller leaves CodeStreamType
+	// unset. 0 = MainStream (high bitrate, ~1.5-3 Mbps), 1 = SubStream
+	// (~0.3-0.8 Mbps). Sub is the right default for cellular-billed
+	// fleets - clients can still ask for main explicitly per request.
+	DefaultLiveCodeStreamType uint8 `env:"JIMI_LIVE_CODE_STREAM_TYPE" envDefault:"1"`
+
+	// DefaultPlaybackCodeType picks the bitrate for 0x9201 (history
+	// playback). 0 = AllStream, 1 = MainStream, 2 = SubStream. Defaults
+	// to SubStream for the same SIM-cost reason.
+	DefaultPlaybackCodeType uint8 `env:"JIMI_PLAYBACK_CODE_TYPE" envDefault:"2"`
 }
 
 func ReadIotHubEnvironments() (*IotHubConfig, error) {

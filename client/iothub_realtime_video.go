@@ -43,7 +43,11 @@ func (cli *IotHubClient) RealTimeAVRequest(ctx context.Context, imei string, dev
 		cmdContent.DataType = AudioVideoDataType
 	}
 	if cmdContent.CodeStreamType == 0 {
-		cmdContent.CodeStreamType = MainStream
+		if cli.config != nil && cli.config.DefaultLiveCodeStreamType != 0 {
+			cmdContent.CodeStreamType = RealTimeCodeStreamType(cli.config.DefaultLiveCodeStreamType)
+		} else {
+			cmdContent.CodeStreamType = MainStream
+		}
 	}
 	if len(cmdContent.Channel) == 0 {
 		cmdContent.Channel = "0"
